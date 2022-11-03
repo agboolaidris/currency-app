@@ -8,3 +8,4 @@ export const theme = {
     compliment50: '#5432d3',
   },
 };
+export type ColorType = keyof typeof theme.colors;
