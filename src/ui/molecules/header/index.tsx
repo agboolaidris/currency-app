@@ -9,21 +9,50 @@ import FilterIcon from '../../../icons/filter';
 import {theme} from '../../../assets/theme';
 import Modal from '../modal';
 import {Text} from '../../atoms/typography';
+import Button from '../button';
+import {IconWrapper} from '../../atoms/iconWrapper';
+import TimeIcon from '../../../icons/time';
+import MarkIcon from '../../../icons/mark';
 
 const Header = () => {
-  const countries = ['Egypt', 'Canada', 'Australia', 'Ireland'];
-  const [selectedLanguage, setSelectedLanguage] = useState();
-
+  const [selectedValue, setSelectedValue] = useState('USD');
   const [showModal, setShowModal] = useState(false);
 
   const handleCloseModal = () => {
     setShowModal(false);
   };
+
+  const data = [
+    {
+      value: 'NGN',
+      label: 'Nigeria NGN',
+    },
+    {
+      value: 'USD',
+      label: 'USA USD',
+    },
+    {
+      value: 'EURO',
+      label: 'Europe EURO',
+    },
+    {
+      value: 'Pound',
+      label: 'Pound',
+    },
+    {
+      value: 'PPP',
+      label: 'Ku PPP',
+    },
+    {
+      value: 'EO',
+      label: 'Eur EO',
+    },
+  ];
   return (
     <>
       <HeaderWrapper>
         <Text color="compliment" style={{fontSize: 30, fontWeight: 'bold'}}>
-          USD
+          {selectedValue}
         </Text>
         <Pressable onPress={() => setShowModal(true)}>
           <FilterWrapper>
@@ -31,29 +60,36 @@ const Header = () => {
           </FilterWrapper>
         </Pressable>
         <Modal visible={showModal} height={300} handleClose={handleCloseModal}>
-          <View>
-            <Picker
-              selectedValue={selectedLanguage}
-              onValueChange={(itemValue, itemIndex) =>
-                setSelectedLanguage(itemValue)
-              }>
-              <Picker.Item
-                label="NGN"
-                value="java"
-                color={theme.colors.dominant50}
-              />
-              <Picker.Item
-                label="EURO"
-                value="js"
-                color={theme.colors.dominant50}
-              />
-              <Picker.Item
-                label="USD"
-                value="j"
-                color={theme.colors.dominant50}
-              />
-            </Picker>
-          </View>
+          <>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <TimeIcon color={theme.colors.danger} size={50} />
+              <MarkIcon color={theme.colors.danger} size={50} />
+              <IconWrapper color="danger"></IconWrapper>
+              <IconWrapper color="success"></IconWrapper>
+            </View>
+            <View>
+              <Picker
+                enabled={false}
+                selectedValue={selectedValue}
+                onValueChange={(itemValue, itemIndex) => {
+                  setSelectedValue(itemValue);
+                }}>
+                {data.map((d, index) => (
+                  <Picker.Item
+                    key={index}
+                    label={d.label}
+                    value={d.value}
+                    color={theme.colors.dominant50}
+                  />
+                ))}
+              </Picker>
+            </View>
+          </>
         </Modal>
       </HeaderWrapper>
     </>

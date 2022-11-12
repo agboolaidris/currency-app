@@ -6,6 +6,8 @@ export const theme = {
     accent50: '#31302E',
     compliment: '#241e92',
     compliment50: '#5432d3',
+    success: '#5cb85c',
+    danger: '#d9534f',
   },
 };
 export type ColorType = keyof typeof theme.colors;
