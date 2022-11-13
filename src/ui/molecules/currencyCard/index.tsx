@@ -12,20 +12,35 @@ const CurrencyCard = () => {
           <Text color="dominant">#</Text>
         </RoundedWrapper>
         <View>
-          <Text color="accent50" style={{fontSize: 18, fontWeight: 'bold'}}>
-            NGN
+          <Text color="accent50" style={{fontSize: 16}}>
+            BTC
+          </Text>
+          <Text color="accent50" style={{fontSize: 12}}>
+            Bitcoin
           </Text>
         </View>
       </View>
       <View style={{flexDirection: 'column'}}>
         <View>
-          <Text color="accent50" style={{fontSize: 18, fontWeight: 'bold'}}>
+          <Text color="accent50" style={{fontSize: 16, fontWeight: 'bold'}}>
+            #123.04
+          </Text>
+          <Text color="danger" style={{fontSize: 12}}>
+            -2.09%
+          </Text>
+        </View>
+        <View></View>
+      </View>
+      <View style={{flexDirection: 'column'}}>
+        <View>
+          <Text color="success" style={{fontSize: 14, fontWeight: 'bold'}}>
+            #123.04
+          </Text>
+          <Text color="danger" style={{fontSize: 14, fontWeight: 'bold'}}>
             #123.04
           </Text>
         </View>
-        <View>
-          <RiseIcon size={50} color="red" />
-        </View>
+        <View></View>
       </View>
     </CurrencyCardWrapper>
   );
