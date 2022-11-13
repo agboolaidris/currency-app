@@ -1,25 +1,30 @@
 import {Pressable, View} from 'react-native';
-import SelectDropdown from 'react-native-select-dropdown';
-import RNPickerSelect from 'react-native-picker-select';
 import {Picker} from '@react-native-picker/picker';
-
 import React, {useState} from 'react';
 import {FilterWrapper, HeaderWrapper} from './style';
 import FilterIcon from '../../../icons/filter';
 import {theme} from '../../../assets/theme';
 import Modal from '../modal';
 import {Text} from '../../atoms/typography';
-import Button from '../button';
 import {IconWrapper} from '../../atoms/iconWrapper';
 import TimeIcon from '../../../icons/time';
 import MarkIcon from '../../../icons/mark';
 
-const Header = () => {
+interface IHeader {
+  onValueChange?: (value: string) => void;
+}
+const Header = ({onValueChange}: IHeader) => {
   const [selectedValue, setSelectedValue] = useState('USD');
+  const [headerValue, setHeaderValue] = useState(selectedValue);
   const [showModal, setShowModal] = useState(false);
 
   const handleCloseModal = () => {
     setShowModal(false);
+  };
+  const handleSubmit = () => {
+    if (onValueChange) onValueChange(selectedValue);
+    setHeaderValue(selectedValue);
+    handleCloseModal();
   };
 
   const data = [
@@ -52,7 +57,7 @@ const Header = () => {
     <>
       <HeaderWrapper>
         <Text color="compliment" style={{fontSize: 30, fontWeight: 'bold'}}>
-          {selectedValue}
+          {headerValue}
         </Text>
         <Pressable onPress={() => setShowModal(true)}>
           <FilterWrapper>
@@ -67,10 +72,12 @@ const Header = () => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <TimeIcon color={theme.colors.danger} size={50} />
-              <MarkIcon color={theme.colors.danger} size={50} />
-              <IconWrapper color="danger"></IconWrapper>
-              <IconWrapper color="success"></IconWrapper>
+              <IconWrapper color="compliment" onPress={handleCloseModal}>
+                <TimeIcon color={theme.colors.danger} width={30} height={30} />
+              </IconWrapper>
+              <IconWrapper color="compliment50" onPress={handleSubmit}>
+                <MarkIcon color={theme.colors.success} width={30} height={30} />
+              </IconWrapper>
             </View>
             <View>
               <Picker

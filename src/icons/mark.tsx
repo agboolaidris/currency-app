@@ -3,12 +3,16 @@ import Svg, {SvgProps, Path} from 'react-native-svg';
 /* SVGR has dropped some elements not supported by react-native-svg: title */
 
 interface MarkIconProps extends SvgProps {
-  size: number;
   color: string;
 }
 const MarkIcon = (props: MarkIconProps) => (
-  <Svg width={props.size} height={props.size} {...props}>
-    <Path d="M0 0h48v1H0z" fill={props.color} fillRule="evenodd" />
+  <Svg fill="none" stroke={props.color} viewBox="0 0 24 24" {...props}>
+    <Path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M5 13l4 4L19 7"
+    />
   </Svg>
 );
 
