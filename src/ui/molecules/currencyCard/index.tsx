@@ -5,7 +5,10 @@ import {Text} from '../../atoms/typography';
 import {CoinType} from '../../../@types/coin';
 import {currencyFormatter} from '../../../helpers/currencyFormatter';
 
-const CurrencyCard = (props: CoinType) => {
+interface ICurrencyCard extends CoinType {
+  currency: string;
+}
+const CurrencyCard = (props: ICurrencyCard) => {
   return (
     <CurrencyCardWrapper>
       <View style={{flexDirection: 'row', alignItems: 'center', width: 100}}>
@@ -27,7 +30,7 @@ const CurrencyCard = (props: CoinType) => {
       <View style={{flexDirection: 'column'}}>
         <View>
           <Text color="accent50" style={{fontSize: 16, fontWeight: 'bold'}}>
-            {currencyFormatter(props.current_price, 'USD')}
+            {currencyFormatter(props.current_price, props.currency)}
           </Text>
           <Text color="danger" style={{fontSize: 12}}>
             {props.ath_change_percentage}%
@@ -38,10 +41,10 @@ const CurrencyCard = (props: CoinType) => {
       <View style={{flexDirection: 'column'}}>
         <View>
           <Text color="success" style={{fontSize: 14, fontWeight: 'bold'}}>
-            {currencyFormatter(props.high_24h, 'USD')}
+            {currencyFormatter(props.high_24h, props.currency)}
           </Text>
           <Text color="danger" style={{fontSize: 14, fontWeight: 'bold'}}>
-            {currencyFormatter(props.low_24h, 'USD')}
+            {currencyFormatter(props.low_24h, props.currency)}
           </Text>
         </View>
         <View></View>
