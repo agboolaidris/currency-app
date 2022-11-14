@@ -9,6 +9,7 @@ import {Text} from '../../atoms/typography';
 import {IconWrapper} from '../../atoms/iconWrapper';
 import TimeIcon from '../../../icons/time';
 import MarkIcon from '../../../icons/mark';
+import currencies from '../../../constants/currencies';
 
 interface IHeader {
   onValueChange?: (value: string) => void;
@@ -27,32 +28,6 @@ const Header = ({onValueChange}: IHeader) => {
     handleCloseModal();
   };
 
-  const data = [
-    {
-      value: 'NGN',
-      label: 'Nigeria NGN',
-    },
-    {
-      value: 'USD',
-      label: 'USA USD',
-    },
-    {
-      value: 'EURO',
-      label: 'Europe EURO',
-    },
-    {
-      value: 'Pound',
-      label: 'Pound',
-    },
-    {
-      value: 'PPP',
-      label: 'Ku PPP',
-    },
-    {
-      value: 'EO',
-      label: 'Eur EO',
-    },
-  ];
   return (
     <>
       <HeaderWrapper>
@@ -86,11 +61,11 @@ const Header = ({onValueChange}: IHeader) => {
                 onValueChange={(itemValue, itemIndex) => {
                   setSelectedValue(itemValue);
                 }}>
-                {data.map((d, index) => (
+                {currencies.map((currency, index) => (
                   <Picker.Item
                     key={index}
-                    label={d.label}
-                    value={d.value}
+                    label={currency.name}
+                    value={currency.cc}
                     color={theme.colors.dominant50}
                   />
                 ))}

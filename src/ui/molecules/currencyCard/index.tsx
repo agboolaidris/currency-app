@@ -1,32 +1,36 @@
-import {View} from 'react-native';
+import {Image, View} from 'react-native';
 import React from 'react';
 import {CurrencyCardWrapper, RoundedWrapper} from './style';
 import {Text} from '../../atoms/typography';
-import {RiseIcon} from '../../../icons/arrow';
+import {CoinType} from '../../../@types/coin';
+import {currencyFormatter} from '../../../helpers/currencyFormatter';
 
-const CurrencyCard = () => {
+const CurrencyCard = (props: CoinType) => {
   return (
     <CurrencyCardWrapper>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+      <View style={{flexDirection: 'row', alignItems: 'center', width: 100}}>
         <RoundedWrapper>
-          <Text color="dominant">#</Text>
+          <Image
+            source={{uri: props.image}}
+            style={{width: '100%', height: '100%'}}
+          />
         </RoundedWrapper>
         <View>
           <Text color="accent50" style={{fontSize: 16}}>
-            BTC
+            {props.symbol}
           </Text>
           <Text color="accent50" style={{fontSize: 12}}>
-            Bitcoin
+            {props.name}
           </Text>
         </View>
       </View>
       <View style={{flexDirection: 'column'}}>
         <View>
           <Text color="accent50" style={{fontSize: 16, fontWeight: 'bold'}}>
-            #123.04
+            {currencyFormatter(props.current_price, 'USD')}
           </Text>
           <Text color="danger" style={{fontSize: 12}}>
-            -2.09%
+            {props.ath_change_percentage}%
           </Text>
         </View>
         <View></View>
@@ -34,10 +38,10 @@ const CurrencyCard = () => {
       <View style={{flexDirection: 'column'}}>
         <View>
           <Text color="success" style={{fontSize: 14, fontWeight: 'bold'}}>
-            #123.04
+            {currencyFormatter(props.high_24h, 'USD')}
           </Text>
           <Text color="danger" style={{fontSize: 14, fontWeight: 'bold'}}>
-            #123.04
+            {currencyFormatter(props.low_24h, 'USD')}
           </Text>
         </View>
         <View></View>
