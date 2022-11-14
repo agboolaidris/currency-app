@@ -13,7 +13,6 @@ export const CurrencyCardWrapper = styled.View`
 export const RoundedWrapper = styled.View`
   width: 50px;
   height: 50px;
-
   border-radius: 10px;
   margin-right: 10px;
   justify-content: center;
