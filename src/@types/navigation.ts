@@ -1,4 +1,11 @@
+export type StackNavigationParams = {
+  Details: undefined;
+  Detail: {
+    id: string;
+  };
+};
+
 export type TabNavgiationParams = {
-  Explore: undefined;
+  Explore: StackNavigationParams;
   Convert: undefined;
 };
