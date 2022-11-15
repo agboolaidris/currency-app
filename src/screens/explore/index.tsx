@@ -14,8 +14,10 @@ import MarkIcon from '../../icons/mark';
 import currencies from '../../constants/currencies';
 import Modal from '../../ui/molecules/modal';
 import {theme} from '../../assets/theme';
+import Loading from '../../ui/molecules/loading';
 
 const Explore = () => {
+  const [loading, setLoading] = useState(true);
   const [selectedValue, setSelectedValue] = useState('USD');
   const [currency, setCurrency] = useState(selectedValue);
   const [showModal, setShowModal] = useState(false);
@@ -28,57 +30,59 @@ const Explore = () => {
     setShowModal(true);
   };
 
-  useEffect(() => {
+  const fetchCoin = () => {
+    setLoading(true);
     axiosInstance
       .get(
         `coins/markets?vs_currency=${currency}&order=market_cap_desc&per_page=100&page=1&sparkline=false`,
       )
       .then(res => {
         setData(res.data);
+        setCurrency(selectedValue);
+        setLoading(false);
       })
       .catch(err => {
-        console.log(err);
+        setLoading(false);
       });
+  };
+  useEffect(() => {
+    fetchCoin();
   }, []);
 
   const handleValueChange = () => {
     handleCloseModal();
-    axiosInstance
-      .get(
-        `coins/markets?vs_currency=${selectedValue}&order=market_cap_desc&per_page=100&page=1&sparkline=false`,
-      )
-      .then(res => {
-        setData(res.data);
-        setCurrency(selectedValue);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    fetchCoin();
   };
 
   return (
     <Wrapper>
-      <FlatList
-        data={data}
-        keyExtractor={({id}) => id}
-        renderItem={({item}) => <CurrencyCard {...item} currency={currency} />}
-        ListHeaderComponent={() => (
-          <>
-            <Header onBarPress={handleOpenModal} title={currency} />
-            <ExploreCardHeaderWrapper>
-              <View>
-                <Text>Name</Text>
-              </View>
-              <View>
-                <Text>Price/24hrs</Text>
-              </View>
-              <View>
-                <Text>high/Low</Text>
-              </View>
-            </ExploreCardHeaderWrapper>
-          </>
-        )}
-      />
+      {loading && <Loading />}
+      {!loading && (
+        <FlatList
+          data={data}
+          keyExtractor={({id}) => id}
+          renderItem={({item}) => (
+            <CurrencyCard {...item} currency={currency} />
+          )}
+          ListHeaderComponent={() => (
+            <>
+              <Header onBarPress={handleOpenModal} title={currency} />
+              <ExploreCardHeaderWrapper>
+                <View>
+                  <Text>Name</Text>
+                </View>
+                <View>
+                  <Text>Price/24hrs</Text>
+                </View>
+                <View>
+                  <Text>high/Low</Text>
+                </View>
+              </ExploreCardHeaderWrapper>
+            </>
+          )}
+        />
+      )}
+
       <Modal visible={showModal} height={300} handleClose={handleCloseModal}>
         <>
           <View
