@@ -68,13 +68,23 @@ const Explore = () => {
             <>
               <Header onBarPress={handleOpenModal} title={currency} />
               <ExploreCardHeaderWrapper>
-                <View>
+                <View style={{width: '40%'}}>
                   <Text>Name</Text>
                 </View>
-                <View>
+                <View
+                  style={{
+                    width: '30%',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
                   <Text>Price/24hrs</Text>
                 </View>
-                <View>
+                <View
+                  style={{
+                    width: '30%',
+                    alignItems: 'flex-end',
+                    justifyContent: 'flex-end',
+                  }}>
                   <Text>high/Low</Text>
                 </View>
               </ExploreCardHeaderWrapper>

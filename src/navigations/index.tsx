@@ -3,13 +3,26 @@ import {NavigationContainer} from '@react-navigation/native';
 import Convert from '../screens/convert';
 import Explore from '../screens/explore';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {theme} from '../assets/theme';
 import CustomTabButtom from '../ui/molecules/customTabButton';
 import {OutlineHomeIcon, SolidHomeIcon} from '../icons/home';
 import {SolidCalculatorIcon, OutlineCalculatorIcon} from '../icons/calculate';
-import {TabNavgiationParams} from '../@types/navigation';
+import {TabNavgiationParams, StackNavigationParams} from '../@types/navigation';
+import CoinDetail from '../screens/explore/_id';
 
 const Tab = createBottomTabNavigator<TabNavgiationParams>();
+
+const Stack = createNativeStackNavigator<StackNavigationParams>();
+
+function ExploreStack() {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="Details" component={Explore} />
+      <Stack.Screen name="Detail" component={CoinDetail} />
+    </Stack.Navigator>
+  );
+}
 
 function Navigation() {
   return (
@@ -23,7 +36,7 @@ function Navigation() {
         }}>
         <Tab.Screen
           name="Explore"
-          component={Explore}
+          component={ExploreStack}
           options={{
             tabBarIcon: props => <SolidHomeIcon {...props} />,
             tabBarLabel: 'Explore',
