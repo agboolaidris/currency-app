@@ -108,15 +108,16 @@ const Explore = () => {
               <MarkIcon color={theme.colors.success} width={30} height={30} />
             </IconWrapper>
           </View>
-          <View>
+          <View style={{flex: 1}}>
             <Picker
-              enabled={false}
+              style={{flex: 1}}
               selectedValue={selectedValue}
               onValueChange={itemValue => {
                 setSelectedValue(itemValue);
               }}>
               {currencies.map((currency, index) => (
                 <Picker.Item
+                  style={{backgroundColor: theme.colors.compliment50}}
                   key={index}
                   label={currency.name}
                   value={currency.cc}
