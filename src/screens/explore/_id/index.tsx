@@ -19,12 +19,12 @@ import Loading from '../../../ui/molecules/loading';
 import {Text} from '../../../ui/atoms/typography';
 import {theme} from '../../../assets/theme';
 import Animated, {useAnimatedStyle} from 'react-native-reanimated';
-import {RoundedWrapper, TitleWrapper} from './style';
 import axiosInstance from '../../../helpers/axios';
 import {Root} from '../../../@types/coin';
 import CoinMarket from './tabs/market';
 import CoinHistory from './tabs/history';
 import CoinChart from './tabs/chart';
+import Header from './components/header';
 
 type Props = NativeStackScreenProps<StackNavigationParams, 'Detail'>;
 
@@ -115,6 +115,7 @@ const CoinDetail = ({route}: Props) => {
   const CoinHistoryTab = () => (
     <CoinHistory html={data ? data.description.en : ''} />
   );
+
   const renderScene = SceneMap({
     market: CoinMarket,
     history: CoinHistoryTab,
@@ -125,30 +126,7 @@ const CoinDetail = ({route}: Props) => {
       {loading && <Loading />}
       {!loading && data && (
         <>
-          <TitleWrapper>
-            <View style={{flexDirection: 'row'}}>
-              <RoundedWrapper>
-                <Image
-                  source={{uri: data.image.small}}
-                  style={{width: '100%', height: '100%'}}
-                />
-              </RoundedWrapper>
-              <View style={{}}>
-                <Text style={{fontSize: 25, fontWeight: 'bold'}}>
-                  {data.symbol}
-                </Text>
-                <Text style={{marginLeft: 5}}>{data.name}</Text>
-              </View>
-            </View>
-            <View style={{justifyContent: 'flex-end', alignItems: 'center'}}>
-              <Text style={{}}>Market cap rank</Text>
-              <Text
-                style={{fontSize: 20, fontWeight: 'bold'}}
-                color="compliment">
-                {data.market_cap_rank}
-              </Text>
-            </View>
-          </TitleWrapper>
+          <Header {...data} />
           <TabView
             renderTabBar={props => (
               <TabBar
