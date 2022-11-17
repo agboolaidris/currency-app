@@ -1,4 +1,4 @@
-import {View, Text} from 'react-native';
+import {ScrollView} from 'react-native';
 import React from 'react';
 import {useWindowDimensions} from 'react-native';
 import RenderHtml from 'react-native-render-html';
@@ -10,9 +10,9 @@ const CoinHistory = ({html}: CoinHistoryProps) => {
   const {width} = useWindowDimensions();
 
   return (
-    <View style={{padding: 10, marginTop: 10}}>
+    <ScrollView style={{padding: 20}}>
       <RenderHtml contentWidth={width} source={{html}} />
-    </View>
+    </ScrollView>
   );
 };
 

@@ -9,10 +9,15 @@ export const TitleWrapper = styled.View`
 `;
 
 export const RoundedWrapper = styled.View`
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 10px;
   margin-right: 10px;
   justify-content: center;
   align-items: center;
+`;
+
+export const IconWrapper = styled.Pressable`
+  padding: 5px 10px;
+  background-color: red;
 `;

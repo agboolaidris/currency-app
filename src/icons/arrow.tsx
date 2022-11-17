@@ -1,18 +1,17 @@
 import * as React from 'react';
-import Svg, {Path} from 'react-native-svg';
+import Svg, {Path, SvgProps} from 'react-native-svg';
 interface Props {
   color: string;
   size: number;
 }
-export function RiseIcon({color, size}: Props) {
+export function BackArrow(props: SvgProps) {
   return (
-    <Svg width={100} height={20} viewBox="0 0 20 12" fill="none">
+    <Svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <Path
-        d="M11 1h8m0 0v8m0-8l-8 8-4-4-6 6"
-        stroke={color}
-        strokeWidth={2}
         strokeLinecap="round"
         strokeLinejoin="round"
+        strokeWidth={2}
+        d="M10 19l-7-7m0 0l7-7m-7 7h18"
       />
     </Svg>
   );
