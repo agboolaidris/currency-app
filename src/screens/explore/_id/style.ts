@@ -1,11 +1,8 @@
 import styled from '@emotion/native';
 import Animated from 'react-native-reanimated';
 
-export const CurrencyCardWrapper = styled(Animated.View)`
+export const TitleWrapper = styled.View`
   padding: 10px 10px;
-  margin: 5px 10px;
-  background-color: ${({theme}) => theme.colors.dominant50};
-  border-radius: 10px;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;

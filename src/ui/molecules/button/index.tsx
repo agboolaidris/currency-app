@@ -1,4 +1,4 @@
-import {StyleProp, TextStyle, ViewStyle} from 'react-native';
+import {Pressable, StyleProp, TextStyle, ViewStyle} from 'react-native';
 import React from 'react';
 import {ButtonWrapper} from './style';
 import {ColorType} from '../../../assets/theme';
@@ -9,16 +9,19 @@ interface IButton {
   textStyle?: StyleProp<TextStyle>;
   style?: StyleProp<ViewStyle>;
   content: string;
+  onPress?: () => void;
 }
-const Button = ({bg, color, textStyle, style, content}: IButton) => {
+const Button = ({bg, color, textStyle, style, content, onPress}: IButton) => {
   return (
-    <ButtonWrapper color={bg} style={style}>
-      <Text
-        color={color || 'dominant50'}
-        style={[{fontWeight: 'bold'}, textStyle]}>
-        {content}
-      </Text>
-    </ButtonWrapper>
+    <Pressable onPress={() => onPress && onPress()}>
+      <ButtonWrapper color={bg} style={style}>
+        <Text
+          color={color || 'dominant50'}
+          style={[{fontWeight: 'bold'}, textStyle]}>
+          {content}
+        </Text>
+      </ButtonWrapper>
+    </Pressable>
   );
 };
 

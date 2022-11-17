@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {
   TabView,
@@ -10,125 +10,160 @@ import {
   View,
   useWindowDimensions,
   Pressable,
-  Animated,
   FlatList,
+  Image,
 } from 'react-native';
 import {StackNavigationParams} from '../../../@types/navigation';
 import {Wrapper} from '../../../ui/atoms/container';
 import Loading from '../../../ui/molecules/loading';
 import {Text} from '../../../ui/atoms/typography';
 import {theme} from '../../../assets/theme';
+import Animated, {useAnimatedStyle} from 'react-native-reanimated';
+import {RoundedWrapper, TitleWrapper} from './style';
+import axiosInstance from '../../../helpers/axios';
+import {Root} from '../../../@types/coin';
+import CoinMarket from './tabs/market';
+import CoinHistory from './tabs/history';
+import CoinChart from './tabs/chart';
 
 type Props = NativeStackScreenProps<StackNavigationParams, 'Detail'>;
 
-const FirstRoute = () => <View style={{flex: 1, backgroundColor: '#ff4081'}} />;
-
-const SecondRoute = () => (
-  <View style={{flex: 1, backgroundColor: '#673ab7'}} />
-);
-
-const renderScene = SceneMap({
-  first: FirstRoute,
-  second: SecondRoute,
-  third: FirstRoute,
-  fourth: SecondRoute,
-  five: FirstRoute,
-  six: SecondRoute,
-});
 interface TabBarProps extends SceneRendererProps {
   navigationState: NavigationState<any>;
   onTabPress: (key: number) => void;
+  activeIndex: number;
+}
+interface ItemProps {
+  active: boolean;
+  content: string;
 }
 
+const Item = ({active, content}: ItemProps) => {
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: active ? 1 : 0.7,
+    };
+  });
+  return (
+    <Animated.View
+      style={[
+        {
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginHorizontal: 5,
+          backgroundColor: theme.colors.compliment,
+          height: 30,
+          width: 70,
+          borderRadius: 5,
+        },
+        animatedStyle,
+      ]}>
+      <Text color="dominant50">{content}</Text>
+    </Animated.View>
+  );
+};
+
 const TabBar = (props: TabBarProps) => {
-  const inputRange = props.navigationState.routes.map((x, i) => i);
   return (
     <View
       style={{
-        minHeight: 50,
-        justifyContent: 'space-evenly',
+        height: 50,
+        justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
         backgroundColor: theme.colors.dominant50,
+        overflow: 'scroll',
+        paddingLeft: 10,
       }}>
       <FlatList
-        horizontal
         data={props.navigationState.routes}
+        horizontal
+        contentContainerStyle={{
+          justifyContent: 'flex-start',
+          flexDirection: 'row',
+          flex: 1,
+        }}
         renderItem={({item, index}) => (
           <Pressable onPress={() => props.onTabPress(index)}>
-            <Item />
+            <Item content={item.title} active={index === props.activeIndex} />
           </Pressable>
         )}
         showsHorizontalScrollIndicator={false}
       />
-      {/* {props.navigationState.routes.map((route, i) => {
-        const opacity = props.position.interpolate({
-          inputRange,
-          outputRange: inputRange.map(inputIndex =>
-            inputIndex === i ? 1 : 0.5,
-          ),
-        });
-
-        return (
-          <Pressable style={{}} onPress={() => props.onTabPress(i)}>
-            <Animated.Text style={{opacity}}>{route.title}</Animated.Text>
-          </Pressable>
-        );
-      })} */}
     </View>
   );
 };
 
-const Item = () => {
-  return (
-    <View
-      style={{
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginHorizontal: 5,
-        backgroundColor: 'grey',
-        height: 30,
-        width: 70,
-      }}>
-      <Text>Ten-10</Text>
-    </View>
-  );
-};
 const CoinDetail = ({route}: Props) => {
   const layout = useWindowDimensions();
-
+  const [loading, setLoading] = useState(true);
   const [index, setIndex] = React.useState(0);
+  const [data, setData] = useState<Root | null>(null);
   const [routes] = React.useState([
-    {key: 'first', title: 'First'},
-    {key: 'second', title: 'Second'},
-    {key: 'third', title: 'Third'},
-    {key: 'fourth', title: 'Fourth'},
-    {key: 'five', title: 'Five'},
-    {key: 'six', title: 'Six'},
+    {key: 'history', title: 'History'},
+    {key: 'market', title: 'Market'},
+    {key: 'chart', title: 'Chart'},
   ]);
 
+  useEffect(() => {
+    axiosInstance.get(`/coins/${route.params.id}`).then(res => {
+      setLoading(false);
+      setData(res.data);
+    });
+  }, []);
+
+  const CoinHistoryTab = () => (
+    <CoinHistory html={data ? data.description.en : ''} />
+  );
+  const renderScene = SceneMap({
+    market: CoinMarket,
+    history: CoinHistoryTab,
+    chart: CoinChart,
+  });
   return (
     <Wrapper>
-      {/* <Text>CoinDetail {route.params.id}</Text> */}
-      {/* <View>
-        <FlatList
-          horizontal
-          data={routes}
-          renderItem={() => <Item />}
-          showsHorizontalScrollIndicator={false}
-        />
-      </View> */}
-
-      {/* <Loading /> */}
-      <TabView
-        renderTabBar={props => (
-          <TabBar {...props} onTabPress={i => setIndex(i)} />
-        )}
-        navigationState={{index, routes}}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        initialLayout={{width: layout.width}}
-      />
+      {loading && <Loading />}
+      {!loading && data && (
+        <>
+          <TitleWrapper>
+            <View style={{flexDirection: 'row'}}>
+              <RoundedWrapper>
+                <Image
+                  source={{uri: data.image.small}}
+                  style={{width: '100%', height: '100%'}}
+                />
+              </RoundedWrapper>
+              <View style={{}}>
+                <Text style={{fontSize: 25, fontWeight: 'bold'}}>
+                  {data.symbol}
+                </Text>
+                <Text style={{marginLeft: 5}}>{data.name}</Text>
+              </View>
+            </View>
+            <View style={{justifyContent: 'flex-end', alignItems: 'center'}}>
+              <Text style={{}}>Market cap rank</Text>
+              <Text
+                style={{fontSize: 20, fontWeight: 'bold'}}
+                color="compliment">
+                {data.market_cap_rank}
+              </Text>
+            </View>
+          </TitleWrapper>
+          <TabView
+            renderTabBar={props => (
+              <TabBar
+                {...props}
+                onTabPress={i => setIndex(i)}
+                activeIndex={index}
+              />
+            )}
+            navigationState={{index, routes}}
+            renderScene={renderScene}
+            onIndexChange={setIndex}
+            initialLayout={{width: layout.width}}
+          />
+        </>
+      )}
     </Wrapper>
   );
 };
